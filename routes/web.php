@@ -27,15 +27,23 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $reqs = Request::all();
     return Inertia::render('Dashboard', [
-        'reqs' => $reqs
+        'reqs' => Request::all()
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/apps', function () {
-    return App::where('active', true)->get();
+Route::get('/apps/{name?}', function ($name = null) {
+    $aps = null;
+    if ($name == 'short') {
+        $apps  = App::where('active', true)->pluck('name', 'id');
+    } else {
+        $apps = App::where('active', true)->get();
+    }
+    return $apps;
 });
+
+// Inertia::share('apps',  App::where('active', true)->pluck('name'));
+
 Route::get('/requests', function () {
     return Request::all();
 });

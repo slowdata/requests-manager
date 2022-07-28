@@ -1,12 +1,23 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
+import CreateRequest from '@/Components/CreateRequest.vue'
 
 defineProps({
     reqs: Array
 })
-let showModal = ref(true)
+
+const description = (des) => {
+    const words = des.split(" ").length
+    if (words > 5) {
+        return `${(des.split(" ").slice(0, 6).join(" ")).trim()}...`
+    } else {
+        return `${(des.split(" ").slice(0, 4).join(" ")).trim()}...`
+    }
+}
+
 </script>
 
 <template>
@@ -20,7 +31,6 @@ let showModal = ref(true)
             </h2>
         </template>
 
-
         <div v-if="!reqs.length" class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -32,20 +42,21 @@ let showModal = ref(true)
         </div>
 
         <div v-else v-for=" req in reqs" class="py-12" :key="req.id">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <button class="mb-1 pl-1">Novo pedido...</button>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <CreateRequest />
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        {{ req.title }}
+                    <div class="py-6 px-4 bg-white border-b border-gray-200
+                    ">
+                        <header class="mb-4">
+                            <h2 class="font-bold">{{ req.title }}</h2>
+                        </header>
+                        <section>
+                            <p class="text-sm">{{ description(req.description) }}</p>
+                        </section>
                     </div>
                 </div>
             </div>
         </div>
 
-
-        <div v-if="showModal" class="fixed inset-0 bg-gray-700 opacity-60 grid place-items-center">
-            <div class="bg-white text-black w-3/4 max-w-lg p-6 rounded-md">Titulo e novo request
-            </div>
-        </div>
     </BreezeAuthenticatedLayout>
 </template>
