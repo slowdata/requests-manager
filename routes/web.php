@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\RequestController;
 use App\Models\App;
 use App\Models\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 /*
@@ -28,7 +30,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
-        'reqs' => Request::all()
+        'reqs' => Request::all(),
+        'store_url' => URL::route('request.store')
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -44,10 +47,9 @@ Route::get('/apps/{name?}', function ($name = null) {
 
 // Inertia::share('apps',  App::where('active', true)->pluck('name'));
 
-Route::get('/requests', function () {
-    return Request::all();
-});
+Route::get('/requests', [RequestController::class, 'index'])->name("request.index");
 
+Route::post('/request', [RequestController::class, 'store'])->name('request.store');
 
 
 require __DIR__ . '/auth.php';
