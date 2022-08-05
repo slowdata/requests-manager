@@ -6,7 +6,8 @@ import { ref, onMounted } from 'vue'
 import CreateRequest from '@/Components/CreateRequest.vue'
 
 defineProps({
-    reqs: Array
+    reqs: Array,
+    store_url: String
 })
 
 const description = (des) => {
@@ -43,7 +44,7 @@ const description = (des) => {
 
         <div v-else v-for=" req in reqs" class="py-12" :key="req.id">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <CreateRequest />
+                <CreateRequest :store_url="store_url" />
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="py-6 px-4 bg-white border-b border-gray-200
                     ">
